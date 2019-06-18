@@ -62,7 +62,7 @@ class GitFlow(object):
             print(commit_msg)
         except subprocess.CalledProcessError as commit_failed:
             err_msg = termcolor.colored('エラーが発生しました。', self.caution)
-            print(err_descript)
+            print(err_msg)
             sys.exit(1)
         try:
             push_confirm = input('git pushを行ってもよろしいですか？\n良ければyかyesを入力してください。中止する場合は他のキーを入力してください。\n')
