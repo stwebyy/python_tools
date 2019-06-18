@@ -62,8 +62,6 @@ class GitFlow(object):
             print(commit_msg)
         except subprocess.CalledProcessError as commit_failed:
             err_msg = termcolor.colored('エラーが発生しました。', self.caution)
-            err_descript = termcolor.colored(commit_failed.stderr, self.caution)
-            print(err_msg)
             print(err_descript)
             sys.exit(1)
         try:
