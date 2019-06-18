@@ -66,32 +66,36 @@ class GitFlow(object):
             print(err_msg)
             print(err_descript)
             sys.exit(1)
-        push_confirm = input('git pushを行ってもよろしいですか？\n良ければyかyesを入力してください。中止する場合は他のキーを入力してください。\n')
-        if push_confirm.strip().lower() == 'y' or push_confirm.strip().lower() == 'yes':
-            get_current_branch_name_cmd = 'git symbolic-ref --short HEAD'
-            branch_name = subprocess.run(get_current_branch_name_cmd, shell=True, stdout=subprocess.PIPE)
-            branch_name_text = branch_name.stdout.decode("utf8")
-            while True:
-                final_confirm = input('branch名は ' + str(branch_name_text).rstrip('\n') + ' ですね？ このbranch名でgit pushします。'
-                                            '実行して良いならば、yかyesを入力してください。\n修正する場合はcかchangeを入力してください。\n')
-                if final_confirm.strip().lower() == 'y' or final_confirm.strip().lower() == 'yes':
-                    try:
-                        push_cmd = 'git push origin {}'.format(branch_name_text)
-                        subprocess.run(push_cmd, shell=True, check=True, stderr=subprocess.STDOUT)
-                        break
-                    except subprocess.CalledProcessError as cpe_msg:
-                        faild_msg = termcolor.colored('git pushに失敗しました。', self.caution)
-                        print(faild_msg)
-                        sys.exit(1)
-                elif final_confirm.strip().lower() == 'c' or final_confirm.strip().lower() == 'change':
-                    branch_change_msg = termcolor.colored('branch名を変更します。', self.caution)
-                    print(branch_change_msg)
-                    branch_name_text = input('branch名を入力してください。\n')
-        else:
-            end_msg = termcolor.colored('スクリプトを終了します。コミットまで完了しました。\nコミットメッセージ'
-                                        'は ' + commit_text + ' です。', self.caution)
+        try:
+            push_confirm = input('git pushを行ってもよろしいですか？\n良ければyかyesを入力してください。中止する場合は他のキーを入力してください。\n')
+            if push_confirm.strip().lower() == 'y' or push_confirm.strip().lower() == 'yes':
+                get_current_branch_name_cmd = 'git symbolic-ref --short HEAD'
+                branch_name = subprocess.run(get_current_branch_name_cmd, shell=True, stdout=subprocess.PIPE)
+                branch_name_text = branch_name.stdout.decode("utf8")
+                while True:
+                    final_confirm = input('branch名は ' + str(branch_name_text).rstrip('\n') + ' ですね？ このbranch名でgit pushします。'
+                                                '実行して良いならば、yかyesを入力してください。\n修正する場合はcかchangeを入力してください。\n')
+                    if final_confirm.strip().lower() == 'y' or final_confirm.strip().lower() == 'yes':
+                        try:
+                            push_cmd = 'git push origin {}'.format(branch_name_text)
+                            subprocess.run(push_cmd, shell=True, check=True, stderr=subprocess.STDOUT)
+                            break
+                        except subprocess.CalledProcessError as cpe_msg:
+                            faild_msg = termcolor.colored('git pushに失敗しました。', self.caution)
+                            print(faild_msg)
+                            sys.exit(1)
+                    elif final_confirm.strip().lower() == 'c' or final_confirm.strip().lower() == 'change':
+                        branch_change_msg = termcolor.colored('branch名を変更します。', self.caution)
+                        print(branch_change_msg)
+                        branch_name_text = input('branch名を入力してください。\n')
+            else:
+                end_msg = termcolor.colored('スクリプトを終了します。コミットまで完了しました。\nコミットメッセージ'
+                                            'は ' + commit_text + ' です。', self.caution)
+                print(end_msg)
+                sys.exit(1)
+        except KeyboardInterrupt:
             print(end_msg)
-            sys.exit(1)
+            sys.exit()
         push_complete_msg = termcolor.colored('正常にgit pushが完了しました。', self.caution)
         print(push_complete_msg)
         sys.exit()
