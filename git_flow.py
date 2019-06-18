@@ -69,7 +69,7 @@ class GitFlow(object):
             get_current_branch_name_cmd = 'git symbolic-ref --short HEAD'
             branch_name = subprocess.run(get_current_branch_name_cmd, shell=True, stdout=subprocess.PIPE)
             while True:
-                final_confirm = input('branch名は ' + branch_name + ' ですね？ このbranch名でgit pushします。'
+                final_confirm = input('branch名は ' + branch_name.stdout + ' ですね？ このbranch名でgit pushします。'
                                                                   '実行して良いならば、yかyesを入力してください。\n'
                                                                   '修正する場合はcかchangeを入力してください。\n')
                 if final_confirm.strip().lower() == 'y' or final_confirm.strip().lower() == 'yes':
