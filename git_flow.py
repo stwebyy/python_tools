@@ -53,12 +53,13 @@ class GitFlow(object):
         try:
             commit_cmd = 'git commit -m {}'.format(commit_text)
             commit_cmd_finish = subprocess.run(commit_cmd, shell=True, check=True, stderr=subprocess.STDOUT)
-            termcolor.colored('コミットメッセージは' + commit_text + 'です。', self.caution)
+            commit_msg = termcolor.colored('コミットメッセージは' + commit_text + 'です。', self.caution)
+            print(commit_msg)
         except subprocess.CalledProcessError:
             err_msg = termcolor.colored('エラーが発生しました。', self.caution)
             err_descript = termcolor.colored(commit_cmd_finish.stderr, self.caution)
-            termcolor.colored(err_msg, self.caution)
-            termcolor.colored(err_descript, self.caution)
+            print(err_msg)
+            print(err_descript)
             sys.exit(1)
         self.git_push()
 
@@ -89,7 +90,7 @@ class GitFlow(object):
         else:
             end_msg = termcolor.colored('スクリプトを終了します。コミットまで完了しました。\nコミットメッセージ'
                                         'は ' + commit_text + ' です。', self.caution)
-            termcolor.colored(end_msg, self.caution)
+            print(end_msg)
             sys.exit(1)
         push_complete_msg = termcolor.colored('正常にgit pushが完了しました。', caution)
         print(push_complete_msg)
